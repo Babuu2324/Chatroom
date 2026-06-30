@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔒 Secret 2-Person Chat</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: #e0e0e0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { background: #1e1e1e; padding: 25px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.6); width: 100%; max-width: 400px; text-align: center; margin: 15px; }
+        h2 { margin-bottom: 20px; color: #00adb5; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #333; border-radius: 8px; background: #2d2d2d; color: #fff; font-size: 16px; }
+        button { width: 100%; padding: 12px; background: #00adb5; border: none; color: #fff; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        button:hover { background: #00818a; }
+        
+        /* Chat Room Styling */
+        #chat-room { display: none; width: 100%; max-width: 500px; height: 90vh; background: #1e1e1e; flex-direction: column; border-radius: 12px; overflow: hidden; }
+        .chat-header { background: #252d32; padding: 15px; text-align: left; font-weight: bold; color: #00adb5; border-bottom: 1px solid #333; }
+        .message-box { flex: 1; padding: 15px; overflow-y: auto; background: #131c21; display: flex; flex-direction: column; }
+        .chat-input-area { display: flex; padding: 10px; background: #1e1e1e; }
+        .chat-input-area input { flex: 1; margin: 0 10px 0 0; }
+        .chat-input-area button { width: auto; padding: 0 20px; margin: 0; }
+    </style>
+</head>
+<body>
+
+    <!-- १. लॉगिन स्क्रीन -->
+    <div id="login-screen" class="container">
+        <h2>Secret Chat Room 🔒</h2>
+        <input type="text" id="username" placeholder="तुमचे नाव (Username)" required>
+        <input type="password" id="password" placeholder="गुपित पासवर्ड (Password)" required>
+        <button onclick="checkLogin()">प्रवेश करा</button>
+    </div>
+
+    <!-- २. चॅट स्क्रीन -->
+    <div id="chat-room">
+        <div class="chat-header">🔒 गुपित चॅट रूम (<span id="user-display"></span>)</div>
+        <div class="message-box" id="messages"></div>
+        <div class="chat-input-area">
+            <input type="text" id="msg-text" placeholder="मेसेज टाईप करा...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = "";
+
+        function checkLogin() {
+            const user = document.getElementById("username").value.trim();
+            const pass = document.getElementById("password").value.trim();
+            
+            // तुमचा दोघांचा एकच कॉमन पासवर्ड खाली बदलू शकता
+            const sharedPassword = "password123"; 
+
+            if (user !== "" && pass === sharedPassword) {
+                currentUser = user;
+                document.getElementById("user-display").innerText = currentUser;
+                document.getElementById("login-screen").style.display = "none";
+                document.getElementById("chat-room").style.display = "flex";
+            } else {
+                alert("पासवर्ड चुकीचा आहे किंवा युझरनेम टाकले नाही!");
+            }
+        }
+
+        function sendMessage() {
+            const msgInput = document.getElementById("msg-text");
+            const msgText = msgInput.value.trim();
+            if(msgText === "") return;
+
+            const msgBox = document.getElementById("messages");
+            const msgElement = document.createElement("div");
+            msgElement.style.padding = "8px 12px";
+            msgElement.style.margin = "5px 0";
+            msgElement.style.borderRadius = "8px";
+            msgElement.style.background = "#056162";
+            msgElement.style.alignSelf = "flex-end";
+            msgElement.style.maxWidth = "70%";
+            msgElement.innerText = currentUser + ": " + msgText;
+            
+            msgBox.appendChild(msgElement);
+            msgInput.value = "";
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
